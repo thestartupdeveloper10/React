@@ -1,12 +1,16 @@
 const Hello = (props) => {  
+  const bornYear = () => {    const yearNow = new Date().getFullYear()
+        return yearNow - props.age  
+      }
   console.log(props);
   return (  
     <div>
       <p>Hello {props.name},your are {props.age} years old</p>
+      <p>You were born on {bornYear()}</p>
       </div>
       )}
 
-      const Footer = () => {
+const Footer = () => {
         return (
           <div>
             greeting app created by <a href='https://github.com/mluukkai'>mluukkai</a>
