@@ -1,3 +1,8 @@
+const Hello = (props) => {  return (  
+    <div>
+      <p>Hello {props.name}</p>
+      </div>
+      )}
 
 function App() {
   console.log('Hello from component')
@@ -9,6 +14,8 @@ function App() {
     <>
       <div>
         <p>Hello world</p>
+        <Hello name ='cliffe' />
+        <Hello name ='ibande' />
       </div>
     </>
   )
