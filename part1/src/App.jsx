@@ -1,59 +1,60 @@
 import { useState } from 'react'
 
-function App() {
-  const [value, setValue] = useState(10)
-
-  const setToValue1 = (newValue) => {
-    console.log('value now', newValue)
-    setValue(newValue)
-  }
-
-  const setToValue = (newValue) => () => { 
-       console.log('value now', newValue)  // print the new value to console    
-       setValue(newValue) 
-       }
-  // defining fuction outside
-  const handleClick = () => {    
-    console.log('clicked the button')  
-      setValue(0)
-    }
-
-// a fuction that returns a function
-  const hello = () => {    
-    const handler = () => console.log('hello world')   
-    return handler  
-  }
-
-//   const hello1 = (who) => {
-//   const handler = () => { console.log('hello', who) }    
-//   return handler 
-//  }
-
- const hello1 = (who) => () => {
-  console.log('hello', who)
-}
-
+const Display = ({counter}) => {
   return (
-    <>
-      <div>
-      {value}
-      {/* <button onClick={() => setValue(0)}>reset to zero</button> */}
-      <button onClick={handleClick}>reset to zero</button>
-      <button onClick={hello()}>Function in function</button>
-      <button onClick={hello1('world')}>button</button>
-      <button onClick={hello1('react')}>button</button>
-      <button onClick={hello1('function')}>button</button>
-
-      <button onClick={setToValue(1000)}>thousand</button>
-      <button onClick={setToValue(0)}>reset</button>
-      <button onClick={setToValue(value + 1)}>increment</button>
-
-      <button onClick={() => setToValue1(1000)}>
-        thousand
-      </button>
-    </div>
-    </>
+    <div>{counter}</div>
   )
 }
+
+
+// buttons 
+const Button = ({onClick,text}) => {
+  return (
+    <button onClick={onClick}>
+      {text}
+    </button>
+  )
+}
+
+
+const App = () => {
+    const [ counter, setCounter ] = useState(0)
+  
+    const handleClick = () => { 
+        console.log('clicked')
+        setCounter(counter+1)
+    }
+
+    // alternatives to function
+    const increaseByOne = () => {
+      console.log('increasing, value before', counter) 
+         setCounter(counter + 1)
+    }
+    
+    const decreaseByOne = () => { 
+      console.log('decreasing, value before', counter)  
+        setCounter(counter - 1)
+    }
+    
+    const setToZero = () => {
+      console.log('resetting to zero, value before', counter)  
+        setCounter(0)
+    }
+
+
+    return (
+      <div>
+        <Display counter={counter}/>
+
+        <button onClick={handleClick}>plus</button>
+
+        {/* define the function directly inside the button */}
+        <Button onClick={increaseByOne} text='plus'/>      
+        <Button onClick={setToZero} text='zero' />          
+        <Button onClick={decreaseByOne} text='minus'/>
+        </div>
+    )
+  }
+
 
 export default App
