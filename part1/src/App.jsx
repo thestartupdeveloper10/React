@@ -1,31 +1,42 @@
-import { useState } from 'react'
-
-const Button =({handleClick,text}) =>{
-  return (
-    <button onClick={handleClick}>{text}</button>
+const Course =({course})=>{
+  return(
+    <div><h1>{course.name}</h1>
+    
+    <ul>
+      {
+        course.parts.map((part)=>{
+          return <li>{part.name}, {part.exercises}</li>
+        })
+      }
+    </ul>
+    </div>
   )
-
 }
 
-function App() {
-  const [value, setValue] = useState(10)
+const App = () => {
+  const course = {
+    id: 1,
+    name: 'Half Stack application development',
+    parts: [
+      {
+        name: 'Fundamentals of React',
+        exercises: 10,
+        id: 1
+      },
+      {
+        name: 'Using props to pass data',
+        exercises: 7,
+        id: 2
+      },
+      {
+        name: 'State of a component',
+        exercises: 14,
+        id: 3
+      }
+    ]
+  }
 
-  // defining function outside
-  const handleClick = () => {    
-    console.log('clicked the button')  
-      setValue(0)
-    }
-
-
-  return (
-    <>
-      <div>
-      {value}
-      {/* <button onClick={() => setValue(0)}>reset to zero</button> */}
-     <Button handleClick={handleClick} text="reset to zero" />
-    </div>
-    </>
-  )
+  return <Course key={course.id} course={course} />
 }
 
 export default App
