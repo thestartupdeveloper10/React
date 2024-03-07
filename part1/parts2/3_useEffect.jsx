@@ -8,6 +8,7 @@ const App = () => {
   const [newNote, setNewNote] = useState('')
   const [showAll, setShowAll] = useState(true)
 
+
   useEffect(() => {
     console.log('effect')
     axios
@@ -17,6 +18,7 @@ const App = () => {
         setNotes(response.data)
       })
   }, [])
+  console.log('render', notes.length, 'notes')
 
   const addNote = (event) => {
     event.preventDefault() 
@@ -26,13 +28,9 @@ const App = () => {
       important: Math.random() < 0.5,
       id: notes.length + 1,
     }
-    axios.post('http://localhost:3001/notes', noteObject)
-    .then(response => { 
-      console.log(response)
-      setNotes(notes.concat(response.data))      
-      setNewNote('')
-    })
-   
+
+    setNotes(notes.concat(noteObject))
+    setNewNote('')
     }
 
 const handleNoteChange = (event) => {    
