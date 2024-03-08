@@ -1,16 +1,25 @@
 // display a single Node
 
-const Note = ({ note, toggleImportance }) => {
-   const label = note.important
-     ? 'make not important' : 'make important'
+const Note = ({ note }) => {
+  return (
+    <li>{note.content}</li>
+  )
+}
+
+export default Note
+
+
+// const Note = ({ note, toggleImportance }) => {
+//    const label = note.important
+//      ? 'make not important' : 'make important'
  
-   return (
-     <li>
-       {note.content} 
-       <button onClick={toggleImportance}>{label}</button>
-     </li>
-   )
- }
+//    return (
+//      <li>
+//        {note.content} 
+//        <button onClick={toggleImportance}>{label}</button>
+//      </li>
+//    )
+//  }
 
 
-  export default Note
+// export default Note
