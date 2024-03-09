@@ -1,65 +1,89 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import noteService from './services/notes'
+import Note from './components/Note'
 
-import Note from "./components/Note"
+
+const App = () => {
+  const [notes, setNotes] = useState([])
+  const [newNote, setNewNote] = useState('')
+  const [showAll, setShowAll] = useState(true)
 
 
-const App = (props) => {
+  useEffect(() => {
+    console.log('effect')
+    noteService
+      .getAll()
+      .then(initialNotes => {
+        console.log('promise fulfilled')
+        setNotes(initialNotes)
+      })
 
-  const [notes,setNotes] = useState(props.notes)
-// controlled Componets
-  const [newNote,setNewNote] = useState('put a new note')
-// filtering 
- const [showAll,setShowAll]=useState(true)
- 
+     
 
-  const notesToShow = showAll ? notes : notes.filter((note)=>{
-   return  note.important === true
-  })
+  }, [])
+  console.log('render', notes.length, 'notes')
 
-//  functions
-  const Addnote = (e) => {
-    e.preventDefault()
-    console.log('button clicked', e.target) 
+  const addNote = (event) => {
+    event.preventDefault() 
+    console.log('button clicked', event.target)
     const noteObject = {
-      content:newNote,
-      important:Math.random()>0.5,
-      id:notes.length+1
+      content: newNote,
+      important: Math.random() < 0.5,
+      id: notes.length + 1,
     }
+    noteService
+    .create(noteObject)
+    .then((response)=>{
+      console.log(response)
+    })
     setNotes(notes.concat(noteObject))
     setNewNote('')
-  }
-  const handleChange = (e) => {
-    console.log(e.target.value)
-    setNewNote(e.target.value)
-  }
+    }
 
-  return (
+    const handleNoteChange = (event) => {    
+    console.log(event.target.value)
+    setNewNote(event.target.value)  
+    }
+    const notesToShow = showAll?notes: notes.filter(note => note.important === true)
+
+
+    // toggle importance
+    const toggleImportanceOf = (id) => {   
+       console.log(`importance of ${id} needs to be toggled`) 
+      //  const url = `http://localhost:3001/notes/${id}`
+       const note = notes.find(n => n.id === id)
+       const changedNote = { ...note, important: !note.important }
+     
+       noteService
+       .update(id,changedNote)
+       .then(response => {
+         setNotes(notes.map(note => note.id !== id ? note : response.data))
+       })
+      }
+  
+  
+  
+    return (
     <div>
       <h1>Notes</h1>
-      {/* <ul>
-      {
-        notes.map((note)=>{
-        return <Note key={note.id} note={note}/> 
-        })
-      }
-      </ul> */}
       <ul>
-      {
-        notesToShow.map((note)=>{
-        return <Note key={note.id} note={note}/> 
-        })
-      }
+        {/* {notes.map(note => 
+          <Note key={note.id} note={note} />
+        )} */}
+        {notesToShow.map(note =><Note key={note.id} note={note}
+        toggleImportance={() => toggleImportanceOf(note.id)}
+        />
+        )}
       </ul>
-      <button onClick={()=>{setShowAll(!showAll)}}>
-        Show {showAll?'important':'All'}
-      </button>
-      <form onSubmit={Addnote} >
-        <input type="text" value={newNote} onChange={handleChange}/>
-        <button type='submin'>Save</button>
-      </form>
+      <button onClick={() => setShowAll(!showAll)}>
+        show {showAll ? 'important' : 'all' }
+        </button>
+      <form onSubmit={addNote}>
+        <input value={newNote} onChange={handleNoteChange}/>
+        <button type="submit">save</button>
+        </form>
     </div>
   )
 }
 
 export default App
-
