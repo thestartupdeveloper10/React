@@ -1,13 +1,11 @@
-const Name = ({ persons }) => {
+const Name = ({ person,handleDelete }) => {
     return (
       <>
-        {persons.map((person) => {
-          return (
-            <ul key={person.name}>
+            <ul>
               {person.name}, {person.number}
+              <button onClick={handleDelete}>Delete</button>
             </ul>
-          );
-        })}
+        
       </>
     );
   };
