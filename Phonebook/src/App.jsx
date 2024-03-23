@@ -5,12 +5,14 @@ import Name from './components/Name';
 import Filter from './components/Filter';
 import Form from './components/Form';
 import phoneService from './services/phone';
+import Notification from './components/Notification';
 
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('');
   const [filter, setFilter] = useState('');
+  const [successMessage, setsuccessMessage] = useState(null)
 
   useEffect(() => {
     phoneService.getAll()
@@ -35,16 +37,35 @@ const App = () => {
     if (!newName.trim()) {
       return;
     }
-
+  
     // If the number is empty, set it to an empty string
-    const number = newNumber.trim() ? newNumber.trim() : '';
-
+    const number = newNumber.trim() ? newNumber.trim() : 'N/A';
+  
+    // Check if the name already exists in the phonebook
+    const existingPerson = persons.find(person => person.name.toLowerCase() === newName.toLowerCase());
+  
+    if (existingPerson) {
+      const confirmUpdate = window.confirm(`${newName} is already in the phonebook.Do you want to update the number?`);
+      if (!confirmUpdate) {
+        return; // Exit the function if the user cancels
+      }
+    }
+  
     // Create name object
     const nameObj = { name: newName, number: number };
-
+  
     // Create or update name
     phoneService.createOrUpdate(nameObj)
       .then(() => {
+        // show succes
+        
+        setsuccessMessage(
+          `${nameObj.name} was added successfully`
+
+        )
+        setTimeout(() => { setsuccessMessage(null)}, 5000)
+
+
         // Update persons state with the updated list
         phoneService.getAll()
           .then((response) => {
@@ -55,6 +76,7 @@ const App = () => {
         console.error('Error adding or updating name:', error);
       });
   };
+  
 
   const handleDelete = (id, name) => {
     // Confirm the action from the user before deleting the person
@@ -66,6 +88,12 @@ const App = () => {
     // If the user confirms, proceed with the deletion
     phoneService.remove(id)
       .then(() => {
+        //delete otification
+        setsuccessMessage(
+          `${name} was deleted successfully`
+
+        )
+        setTimeout(() => { setsuccessMessage(null)}, 3000)
         // Update persons state with the updated list
         phoneService.getAll()
           .then((response) => {
@@ -95,6 +123,7 @@ const App = () => {
 
   return (
     <div>
+      <Notification message={successMessage} />
       <h2>Phonebook</h2>
       <Filter handleFilter={handleFilter} />
       <h2>Add New</h2>
