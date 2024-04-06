@@ -3,12 +3,12 @@
     {
       "id": "1",
       "content": "HTML is easy",
-      "important": false
+      "important": true
     },
     {
       "id": "2",
       "content": "Browser can execute only JavaScript",
-      "important": true
+      "important": false
     },
     {
       "id": "3",
@@ -18,7 +18,7 @@
     {
       "id": "4",
       "content": "clemmo",
-      "important": true
+      "important": false
     },
     {
       "id": "5",
@@ -33,11 +33,21 @@
     {
       "id": "7874",
       "content": "cliffe",
-      "important": false
+      "important": true
     },
     {
       "id": "9018",
       "content": "khadija",
+      "important": false
+    },
+    {
+      "id": "9",
+      "content": "hahaha",
+      "important": true
+    },
+    {
+      "id": "f9de",
+      "content": "hae hAA",
       "important": false
     }
   ]
