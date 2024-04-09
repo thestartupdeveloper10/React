@@ -1,10 +1,10 @@
+require('dotenv').config()
 const express = require('express')
 const app = express()
-require('dotenv').config()
-
+const cors = require('cors')
 const Note = require('./models/notes')
 
-app.use(express.static('dist'))
+
 
 const requestLogger = (request, response, next) => {
   console.log('Method:', request.method)
@@ -27,8 +27,8 @@ const errorHandler = (error, request, response, next) => {
   next(error)
 }
 
-const cors = require('cors')
 
+app.use(express.static('dist'))
 app.use(cors())
 app.use(express.json())
 app.use(requestLogger)
@@ -49,6 +49,10 @@ app.get('/api/notes', (request, response) => {
 
 app.post('/api/notes', (request, response, next) => {
   const body = request.body
+
+  // if (body.content === undefined) {
+  //   return response.status(400).json({ error: 'content missing' })
+  // }
 
   const note = new Note({
     content: body.content,
