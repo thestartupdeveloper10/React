@@ -1,6 +1,7 @@
 import { useState } from 'react'
 
 const App = () => {
+  // component's state or a piece of its state can be of any type 
   const [clicks, setClicks] = useState({
     left: 0, right: 0
   })
