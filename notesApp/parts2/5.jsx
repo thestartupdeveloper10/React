@@ -21,6 +21,9 @@ const App = () => {
         console.log('promise fulfilled')
         setNotes(initialNotes)
       })
+      .catch(err => {
+        console.log('fail')
+      })
 
      
 
@@ -42,6 +45,8 @@ const App = () => {
       important: Math.random() < 0.5,
       // id: notes.length + 1,
     }
+
+    // create new note
     noteService
     .create(noteObject)
     .then((response)=>{
@@ -71,6 +76,7 @@ const App = () => {
          setNotes(notes.map(note => note.id !== id ? note : response.data))
        })
        .catch(error => {
+        console.log('fail')
         console.log(error)
         setErrorMessage(`Note '${note.content}' was already removed from server`)       
         setTimeout(() => {setErrorMessage(null)}, 5000)

@@ -1,58 +1,44 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import axios from 'axios'
 
-function App() {
-  const [value, setValue] = useState(10)
+const App = () => {
+  const [value, setValue] = useState('')
+  const [rates, setRates] = useState({})
+  const [currency, setCurrency] = useState(null)
 
-  const setToValue1 = (newValue) => {
-    console.log('value now', newValue)
-    setValue(newValue)
-  }
+  useEffect(() => {
+    console.log('effect run, currency is now', currency)
 
-  const setToValue = (newValue) => () => { 
-       console.log('value now', newValue)  // print the new value to console    
-       setValue(newValue) 
-       }
-  // defining fuction outside
-  const handleClick = () => {    
-    console.log('clicked the button')  
-      setValue(0)
+    // skip if currency is not defined
+    if (currency) {
+      console.log('fetching exchange rates...')
+      axios
+        .get(`https://open.er-api.com/v6/latest/${currency}`)
+        .then(response => {
+          setRates(response.data.rates)
+        })
     }
+  }, [currency])
 
-// a fuction that returns a function
-  const hello = () => {    
-    const handler = () => console.log('hello world')   
-    return handler  
+  const handleChange = (event) => {
+    setValue(event.target.value)
   }
 
-//   const hello1 = (who) => {
-//   const handler = () => { console.log('hello', who) }    
-//   return handler 
-//  }
-
- const hello1 = (who) => () => {
-  console.log('hello', who)
-}
+  const onSearch = (event) => {
+    event.preventDefault()
+    setCurrency(value)
+  }
 
   return (
-    <>
-      <div>
-      {value}
-      {/* <button onClick={() => setValue(0)}>reset to zero</button> */}
-      <button onClick={handleClick}>reset to zero</button>
-      <button onClick={hello()}>Function in function</button>
-      <button onClick={hello1('world')}>button</button>
-      <button onClick={hello1('react')}>button</button>
-      <button onClick={hello1('function')}>button</button>
-
-      <button onClick={setToValue(1000)}>thousand</button>
-      <button onClick={setToValue(0)}>reset</button>
-      <button onClick={setToValue(value + 1)}>increment</button>
-
-      <button onClick={() => setToValue1(1000)}>
-        thousand
-      </button>
+    <div>
+      <form onSubmit={onSearch}>
+        currency: <input value={value} onChange={handleChange} />
+        <button type="submit">exchange rate</button>
+      </form>
+      <pre>
+        {JSON.stringify(rates, null, 2)}
+      </pre>
     </div>
-    </>
   )
 }
 

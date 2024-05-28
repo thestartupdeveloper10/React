@@ -23,7 +23,7 @@ const App = () => {
     const noteObject = {
       content: newNote,
       important: Math.random() < 0.5,
-      id: notes.length + 1,
+      // id: notes.length + 1,
     };
     axios.post('http://localhost:3001/notes', noteObject)
     .then(response => { 
@@ -34,9 +34,11 @@ const App = () => {
   };
 
   const toggleImportanceOf = (id) => {
-    console.log('importance of ' + id + ' needs to be toggled');
+    console.log(`importance of ${id} needs to be toggled`);
     const note = notes.find(note => note.id === id);
-    const changedNote = { ...note, important: !note.important };
+    const changedNote = { ...note,
+                          important: !note.important
+                         };
     axios.put(`http://localhost:3001/notes/${id}`, changedNote)
       .then(response => {
         setNotes(notes.map(note => note.id !== id ? note : response.data));
